@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import se.smokestack.parse.Nashorn;
+
 @ApplicationScoped
 public class ApplicationStart {
 	private static final Logger log = LogManager.getLogger();
@@ -14,5 +16,7 @@ public class ApplicationStart {
 	@PostConstruct
 	private void start() {
 		log.info("starting up");
+		Nashorn h = new Nashorn();
+		h.test();
 	}
 }
