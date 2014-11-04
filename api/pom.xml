@@ -22,8 +22,26 @@
 	<artifactId>smokestack-api</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
+		<name>smokestack-api</name>
+
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>jar</packaging>
+	
+	
+		<build>
+		<plugins>
 
-	<name>Smokestack-api</name>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
 </project>
