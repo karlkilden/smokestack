@@ -1,5 +1,8 @@
 package se.smokestack.boot;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import org.apache.deltaspike.cdise.api.ContextControl;
@@ -9,7 +12,8 @@ import javax.enterprise.context.ApplicationScoped;
 
 public class Smokestack {
 	public static void main(String[] args) {
-
+        Logger logger = Logger.getLogger("org.apache.webbeans.corespi.scanner.AbstractMetaDataDiscovery");
+        logger.setLevel(Level.SEVERE);
 		CdiContainer cdiContainer = CdiContainerLoader.getCdiContainer();
 		cdiContainer.boot();
 

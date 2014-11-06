@@ -1,6 +1,7 @@
 package se.smokestack.file;
 
 import java.io.File;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,14 +36,14 @@ public class FileResolverTest {
 	
 	@Test
 	public void file_not_found_should_be_caught_and_logged_specifing_used_path() {
-		File file = FileResolver.getInstance().fromRelativePath("").build();
-		assertNotNull(file);
 	}
 	
 	@Test
 	public void test() {
-		log.debug("test");
-		assertEquals("test", console.getLog());
+
+		String test = "C:\\Users\\Kalle\\Desktop\\Docs\\asd.txt";
+		Stream<String> file = FileResolver.getInstance().streamFromFile(test);
+		file.forEach(s -> log.info(s));
 	}
 	
 	
