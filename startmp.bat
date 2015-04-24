@@ -1,0 +1,1 @@
+sc start %1

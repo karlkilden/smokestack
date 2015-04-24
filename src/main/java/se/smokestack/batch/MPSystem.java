@@ -77,7 +77,9 @@ public class MPSystem {
 			if (isAuth(lines)) {
 				
 				stopService(conf);
+				// copy war
 				
+				startService(conf);
 				
 			}
 			else {
@@ -89,6 +91,12 @@ public class MPSystem {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private void startService(WarConf conf) throws IOException, InterruptedException {
+		String command = "cmd /c start startmp.bat "+ " " + conf.getService();
+		Process process = Runtime.getRuntime().exec(command);
+		process.waitFor();
 	}
 
 	private void stopService(WarConf conf) throws Exception {
