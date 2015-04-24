@@ -1,7 +1,7 @@
 package se.smokestack.boot;
 
-import java.util.ArrayList;
-import java.util.List;
+import static se.smokestack.boot.Conf.split;
+
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -12,8 +12,6 @@ import org.apache.deltaspike.core.api.resourceloader.FileResourceProvider;
 import org.apache.deltaspike.core.api.resourceloader.InjectableResource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.google.common.base.Splitter;
 @ApplicationScoped
 public class BirdmanConfigReader {
 	@Inject
@@ -26,23 +24,18 @@ public class BirdmanConfigReader {
 	public void test() {
 		log.info(p);
 
-		Iterable<String> systems = split(p.getProperty("cmd"));
-		Iterable<String> commands = split(p.getProperty("sys"));
+		Iterable<String> systems = split(p.getProperty("sys"));
+		Iterable<String> commands = split(p.getProperty("cmd"));
 		
-		holder = new ConfHolder();
+		holder = new ConfHolder(p);
 		for (String cmd : commands) {
 			for (String sys : systems) {
-				holder.add(cmd, sys, p);
+				holder.add(cmd, sys);
 			}
 		}
 	}
 	
-	 private Iterable<String> split(String token) {
-		 return Splitter.on(',')
-			       .trimResults()
-			       .omitEmptyStrings()
-			       .split(token);
-	 }
+
 
 
 	public ConfHolder getConfHolder(String[] params) {

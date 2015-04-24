@@ -24,7 +24,7 @@ public class Smokestack {
 
 		ApplicationStart appStart = BeanProvider
 				.getContextualReference(ApplicationStart.class);
-		appStart.toString();
+		appStart.fly(args);
 
 		cdiContainer.shutdown();
 	}

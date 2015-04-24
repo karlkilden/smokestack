@@ -1,0 +1,16 @@
+# Automatically abort script on errors
+option batch abort
+# Disable overwrite confirmations that conflict with the previous
+option confirm off
+# Connect
+open ftp://rdkund:raindance@ftp1.wm.net
+# Change remote directory
+cd %2%
+# Force binary mode transfer
+option transfer binary
+# Download file to the local directory d:\
+# get test.txt c:\
+get %3% %4%
+# Disconnect
+close
+exit

@@ -12,17 +12,24 @@ import se.smokestack.batch.MPSystem;
 public class ApplicationStart {
 
 	@Inject
-	private MPSystem sys;
+	private MPSystem mpSystem;
+	
+	@Inject
+	private BirdmanConfigReader birdmanConfigReader;
 
 	@PostConstruct
 	private void start() {
-		try {
-			CopyDir d = new CopyDir();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		
 	}	
+	
+	public void fly(String[] params) {
+		ConfHolder confHolder = birdmanConfigReader.getConfHolder(params);
+		
+		mpSystem.handleConfs(confHolder);
+
+		
+	}
 	
 
 }
