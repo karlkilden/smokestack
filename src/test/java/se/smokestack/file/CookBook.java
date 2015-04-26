@@ -10,4 +10,17 @@ public class CookBook {
 //		e.printStackTrace();
 //
 //	}
+	
+	
+	// read command
+	// read infiles
+	// copy user and file info to a metadata file
+	// push to configured place on ftp
+	//
+	
+	
+	// read infiles
+	// read metadata
+	// log stuff
+	// perform action
 }

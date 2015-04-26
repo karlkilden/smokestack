@@ -1,0 +1,8 @@
+option batch abort
+option confirm off
+open %ftp.url%
+cd %ftp.dir%/%copy.destination%
+option transfer binary
+put %copy.target% 
+# Disconnect
+close

@@ -1,19 +1,23 @@
 package se.smokestack.boot;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import org.apache.deltaspike.cdise.api.ContextControl;
 import org.apache.deltaspike.core.api.provider.BeanProvider;
-
-import javax.enterprise.context.ApplicationScoped;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Smokestack {
+	
+	JulLogHandler handler = new JulLogHandler();
+	
+	private static final Logger log = LogManager.getLogger();
+
 	public static void main(String[] args) {
-        Logger logger = Logger.getLogger("org.apache.webbeans.corespi.scanner.AbstractMetaDataDiscovery");
-        logger.setLevel(Level.SEVERE);
+
+
 		CdiContainer cdiContainer = CdiContainerLoader.getCdiContainer();
 		cdiContainer.boot();
 
@@ -24,8 +28,12 @@ public class Smokestack {
 
 		ApplicationStart appStart = BeanProvider
 				.getContextualReference(ApplicationStart.class);
-		appStart.fly(args);
-
+		try {
+			appStart.fly(args);
+		} catch (Exception e) {
+			
+		}
 		cdiContainer.shutdown();
+		log.info("shutting down");
 	}
 }

@@ -1,4 +1,4 @@
-package se.smokestack.batch;
+package se.smokestack.bm;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,14 +52,14 @@ public class MPSystem {
 			File f = new File(filename);
 			System.out.println(filename);
 			while (!f.canRead()) {
-				sleep(1000L);
+//				sleep(1000L);
 
 			}
 			boolean wait = true;
 			long lastSize = 0L;
 			int checks = 0;
 			while (wait) {
-				sleep(WAIT);
+//				sleep(WAIT);
 				long size = f.getTotalSpace();
 				log.info("size {}, lastSize {}", size, lastSize);
 				boolean noChange = lastSize == size;
@@ -70,16 +70,16 @@ public class MPSystem {
 				}
 				lastSize = size;
 			}
-			sleep(WAIT);
+//			sleep(WAIT);
 			log.info("finished");
 			List<String> lines = FileUtils.readLines(new File(targetPath+"usr"),Charset.defaultCharset());
 			
 			if (isAuth(lines)) {
-				
-				stopService(conf);
-				// copy war
-				
-				startService(conf);
+//				
+//				stopService(conf);
+//				// copy war
+//				
+//				startService(conf);
 				
 			}
 			else {
@@ -93,34 +93,11 @@ public class MPSystem {
 		}
 	}
 
-	private void startService(WarConf conf) throws IOException, InterruptedException {
-		String command = "cmd /c start startmp.bat "+ " " + conf.getService();
-		Process process = Runtime.getRuntime().exec(command);
-		process.waitFor();
-	}
 
-	private void stopService(WarConf conf) throws Exception {
-		try { 
-		    Socket socket = new Socket("localhost", 8005); 
-		    if (socket.isConnected()) { 
-		        PrintWriter pw = new PrintWriter(socket.getOutputStream(), true); 
-		        pw.println("SHUTDOWN");//send shut down command 
-		        pw.close(); 
-		        socket.close(); 
-		    } 
-		} catch (Exception e) { 
-		    e.printStackTrace(); 
-		}
-		
-		
-	}
 
 	private boolean isAuth(List<String> lines) {
 		return confHolder.getUsers().contains(lines.get(0));
 	}
 
-	private void sleep(long time) throws InterruptedException {
-		Thread.sleep(time);
-	}
 
 }
