@@ -14,9 +14,6 @@ public class BMCommandWriter {
 	private BMConfig bmConfig;
 
 	@Inject
-	private WinSCPHandler winSCPHandler;
-
-	@Inject
 	private IOHelper ioHelper;
 
 	void markHandled(BMCommand data) {
@@ -29,12 +26,22 @@ public class BMCommandWriter {
 		writeMetaData(data);
 	}
 
-	private void writeMetaData(BMCommand data) {
+	public void writeClientCommand(BMCommand bmCommand) {
+
+		doWrite(bmCommand, bmConfig.getLocalTempDir() + "/" + bmCommand.getSystem()+ "/" + BMCommand.BM_COMMAND);
+
+	}
+
+	private void writeMetaData(BMCommand bmCommand) {
+		doWrite(bmCommand, bmConfig.getUserCommandPath());
+		WinSCPScript script = WinSCPScript.getWriteInstance(BMCommand.PUT_FILE_NAME, bmConfig).put().target(bmConfig.getUserCommandPath());
+		ioHelper.winscp(script);
+	}
+
+	private void doWrite(BMCommand data, String path) {
 		try {
 
-			MAPPER.writeValue(new File(bmConfig.getUserCommandPath()), data);
-			WinSCPScript script = WinSCPScript.getWriteInstance(BMCommand.PUT_FILE_NAME, bmConfig).put().target(bmConfig.getUserCommandPath());
-			ioHelper.winscp(script);
+			MAPPER.writeValue(new File(path), data);
 		} catch (Exception e) {
 			ExceptionUtils.throwAsRuntimeException(e);
 		}

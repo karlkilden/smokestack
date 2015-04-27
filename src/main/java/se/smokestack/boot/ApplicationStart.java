@@ -23,7 +23,6 @@ public class ApplicationStart {
 
 	@PostConstruct
 	private void start() {
-		System.out.println(System.getProperty("user.name"));
 
 	}
 

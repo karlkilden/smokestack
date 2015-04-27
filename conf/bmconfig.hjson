@@ -39,6 +39,6 @@
     verification: c:\\test\\test
     production: c:\\test\\test
   }
-  brokerDir: \\164.9.165.138\e$\RPSenasteWAR\bmdrop
+  brokerDir: C:\\kalle\\smokestack\\target\\
   
 }

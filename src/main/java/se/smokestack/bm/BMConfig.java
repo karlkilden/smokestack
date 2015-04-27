@@ -17,6 +17,8 @@ import org.apache.deltaspike.core.util.ExceptionUtils;
 
 @Alternative
 public class BMConfig implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private String warfileName;
 	private String ftpURL;
 	private String ftpDir;

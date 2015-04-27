@@ -16,7 +16,8 @@ public class Smokestack {
 	private static final Logger log = LogManager.getLogger();
 
 	public static void main(String[] args) {
-
+		
+		log.info(System.getProperty("user.dir"));
 
 		CdiContainer cdiContainer = CdiContainerLoader.getCdiContainer();
 		cdiContainer.boot();
