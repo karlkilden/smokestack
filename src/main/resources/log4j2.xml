@@ -4,15 +4,21 @@
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</Console>
-		<File name="File1" fileName="output.log" bufferedIO="false">
+		<File name="File1" fileName="output.log" bufferedIO="true">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
-
+		</File>
+		<File name="cmdlog" fileName="cmdlog.log" bufferedIO="false">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</File>
 	</Appenders>
+
 	<Loggers>
 		<Root level="debug">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="File1" />
 		</Root>
+		<Logger name="se.smokestack.bm.log" additivity="TRUE" level="ALL">
+			<AppenderRef ref="cmdlog" level="ALL" />
+		</Logger>
 	</Loggers>
 </Configuration>

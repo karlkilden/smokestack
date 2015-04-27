@@ -1,6 +1,5 @@
 package se.smokestack.bm;
 
-import static se.smokestack.bm.PropertyKeys.WINSCP_DIR;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,12 +21,12 @@ public class WinSCPHandler {
 	private Map<String, String> templates = new HashMap<>();
 
 	@Inject
-	private PropertyHelper propertyHelper;
+	private BMConfig bmConfig;
 
 	public void writeScriptToDisk(WinSCPScript script) {
 		String file = script.create(templates.get(script.getTemplateKey()));
 		try {
-			Files.write(Paths.get(propertyHelper.get(WINSCP_DIR) + script.getScriptName()), file.getBytes());
+			Files.write(Paths.get(bmConfig.getWinscpDir() + script.getScriptName()), file.getBytes());
 		} catch (IOException e) {
 			ExceptionUtils.throwAsRuntimeException(e);
 		}

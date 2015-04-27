@@ -12,16 +12,12 @@ public class WinSCPHandlerTest {
 	WinSCPHandler handler;
 	
 	@Inject
-	PropertyHelper propertyHelper;
+	BMConfig bmConfig;
 	
 	@Test
 		public void testWriteScriptToDisk() throws Exception {
-			WinSCPScript script = WinSCPScript.getInstance("test")
-					.destination("temp")
-					.target(propertyHelper.get(PropertyKeys.FTP_BIRDMAN_DIR))
-					.ftpDir(propertyHelper.get(PropertyKeys.FTP_DIR))
-					.ftpUrl(propertyHelper.get(PropertyKeys.FTP_ULR)).build();
-			handler.writeScriptToDisk(script);
+
+//			handler.writeScriptToDisk(script);
 		}
 
 }

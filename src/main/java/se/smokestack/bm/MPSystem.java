@@ -1,17 +1,8 @@
 package se.smokestack.bm;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.logging.log4j.LogManager;

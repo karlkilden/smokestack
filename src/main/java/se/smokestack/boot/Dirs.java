@@ -1,25 +1,32 @@
 package se.smokestack.boot;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.CopyOption;
+import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.EnumSet;
+import java.util.Objects;
 
-public class CopyDir {
-	File src = new File("c:/temp/");
-	File dest = new File("c:/temp2/");
-	Path srcPath = src.toPath();
-	Path destPath = dest.toPath();
+public class Dirs {
 
-	public CopyDir() throws IOException {
-
-		Files.walkFileTree(srcPath, new CopyDirVisitor(srcPath, destPath,
+	public static void copy(Path from, Path to) throws IOException {
+		validate(from);
+		Files.walkFileTree(from, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE, new CopyDirVisitor(from, to,
 				StandardCopyOption.REPLACE_EXISTING));
+	}
+
+	private static void validate(Path... paths) {
+		for (Path path : paths) {
+			Objects.requireNonNull(path);
+			if (!Files.isDirectory(path)) {
+				throw new IllegalArgumentException(String.format("%s is not a directory", path.toString()));
+			}
+		}
 	}
 
 	public static class CopyDirVisitor extends SimpleFileVisitor<Path> {
@@ -34,8 +41,7 @@ public class CopyDir {
 		}
 
 		@Override
-		public FileVisitResult preVisitDirectory(Path dir,
-				BasicFileAttributes attrs) throws IOException {
+		public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
 			Path targetPath = toPath.resolve(fromPath.relativize(dir));
 			if (!Files.exists(targetPath)) {
 				Files.createDirectory(targetPath);
@@ -44,10 +50,8 @@ public class CopyDir {
 		}
 
 		@Override
-		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-				throws IOException {
-			Files.copy(file, toPath.resolve(fromPath.relativize(file)),
-					copyOption);
+		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+			Files.copy(file, toPath.resolve(fromPath.relativize(file)), copyOption);
 			return FileVisitResult.CONTINUE;
 		}
 	}

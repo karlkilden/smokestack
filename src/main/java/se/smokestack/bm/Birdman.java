@@ -1,61 +1,109 @@
 package se.smokestack.bm;
 
-import java.util.Optional;
-import java.util.Properties;
+import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Paths.get;
 
+import java.util.Optional;
+
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
-import org.apache.deltaspike.core.api.resourceloader.FileResourceProvider;
-import org.apache.deltaspike.core.api.resourceloader.InjectableResource;
+import org.apache.deltaspike.core.util.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hjson.JsonValue;
+import org.hjson.Stringify;
+
+import se.smokestack.bm.client.BMClient;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ApplicationScoped
 public class Birdman {
 
 	public static final String METADATA_FILE_NAME = "meta";
-	private static final String PROPERTIES_FILE_NAME = "bm.properties";
+	private static final String BM_CONFIG_FILE = "conf/bmconfig.hjson";
 	private static final Logger LOG = LogManager.getLogger();
+	private static final Logger AUDIT = LogManager.getLogger("se.smokestack.bm.log");
 
 	@Inject
-	@InjectableResource(resourceProvider = FileResourceProvider.class, location = PROPERTIES_FILE_NAME)
-	private Properties properties;
+	private BMCommandReader metaHandler;
 
 	@Inject
-	private MetadataReader metaHandler;
+	private Instance<BMCommandHandler> handlers;
 
 	@Inject
-	private Instance<CommandHandler> handlers;
+	private BMCommandWriter bmCommandWriter;
 
-	public void run() {
+	@Produces
+	@ApplicationScoped
+	private BMConfig config;
 
-		Optional<Metadata> data = metaHandler.getNextMeta();
+	@Inject
+	private BMClient client;
 
-		if (data.isPresent()) {
-			extecuteCommand(data.get());
+	public void fly(String[] params) {
+
+		if (config.isClient()) {
+			client.runClientLoop(params);
 		}
+
 		else {
-			LOG.info("no metadata found");
+			server();
 		}
-
-		// String command =
-		// "cmd /c C:/projects/WinSCP/WinSCP.exe /script=C:/projects/WinSCP/test.script";
-		// processRunner.runProcess(command);
 
 	}
 
-	private void extecuteCommand(Metadata data) {
-		for (CommandHandler handler : handlers) {
-			if (handler.command() == data.getCommand()) {
-				handler.handle(data);
-				if (data.isHandled()) {
-					LOG.info("command {} was executed", handler.command());
-				} else {
-					LOG.error("command {} was not executed", handler.command());
+	private void server() {
+		Optional<BMCommand> data = metaHandler.getNextMeta();
+		if (data.isPresent()) {
+			config.addMetadata(data.get());
+			LOG.info("Session started for {}", config.getBMCommand().getUser());
+			extecuteCommand(data.get());
+			server();
+		} else {
+			LOG.info("no bmCommand found");
+		}
+	}
+
+	private void extecuteCommand(BMCommand data) {
+		try {
+			for (BMCommandHandler handler : handlers) {
+				if (handler.command() == data.getCommand()) {
+					handler.handle(data);
+					bmCommandWriter.markHandled(data);
+					AUDIT.info(data.getUser() + " " + data.getCommand() + " " + data.isHandled());
+					if (data.isHandled()) {
+						LOG.info("command {} was executed", handler.command());
+					} else {
+						LOG.error("command {} was not executed", handler.command());
+					}
 				}
 			}
+			if (!data.isHandled()) {
+				throw new IllegalStateException("command " + data.getCommand() + "was not managed by any handler ");
+			}
+		} catch (Exception e) {
+			bmCommandWriter.markInError(data);
+			LOG.error("Error executing data. Will mark it in error. {}", data);
+			LOG.error("", e);
+		}
+	}
+
+	@PostConstruct
+	private void initConfig() {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			String confString = new String(readAllBytes(get(BM_CONFIG_FILE)));
+			String jsonString = JsonValue.readHjson(confString).toString(Stringify.PLAIN);
+			config = mapper.readValue(jsonString, BMConfig.class);
+			config.postConstruct();
+
+		} catch (Exception e) {
+			ExceptionUtils.throwAsRuntimeException(e);
 		}
 
 	}

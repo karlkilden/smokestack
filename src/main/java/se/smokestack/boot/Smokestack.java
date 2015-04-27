@@ -29,7 +29,7 @@ public class Smokestack {
 		ApplicationStart appStart = BeanProvider
 				.getContextualReference(ApplicationStart.class);
 		try {
-			appStart.fly(args);
+			appStart.run(args);
 		} catch (Exception e) {
 			
 		}

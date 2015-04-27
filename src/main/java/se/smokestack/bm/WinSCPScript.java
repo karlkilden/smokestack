@@ -14,38 +14,42 @@ public class WinSCPScript {
 	private String ftpDir;
 	private String ftpUrl;
 	private String scriptName;
-	
+
 	private String templateKey;
 
 	public static final String COPY_DESTINATION = "%copy.destination%";
 	public static final String COPY_TARGET = "%copy.target%";
 	public static final String FTP_DIR = "%ftp.dir%";
 	public static final String FTP_URL = "%ftp.url%";
-	
+
 	private static final String GET_TEMPLATE = "winspc_get";
 	private static final String PUT_TEMPLATE = "winspc_put";
-	
-	public static final String[] TEMPLATES = new String[] {GET_TEMPLATE, PUT_TEMPLATE};
+	private static final String PUT_LOGS_TEMPLATE = "winspc_put_logs";
+
+	public static final String[] TEMPLATES = new String[] { GET_TEMPLATE, PUT_TEMPLATE };
 
 	private WinSCPScript(String scriptName) {
 		this.scriptName = scriptName;
 	}
 
+	public static WinSCPScript getWriteInstance(String scriptName, BMConfig bmConfig) {
+		return new WinSCPScript(scriptName + ".txt").ftpUrl(bmConfig.getFtpURL()).ftpDir(bmConfig.getFtpDir() + "/" + bmConfig.getFtpBmDir())
+				.destination(bmConfig.getBMCommand().getUser() + "/");
+	}
+
 	public static WinSCPScript getInstance(String scriptName) {
-		return new WinSCPScript(scriptName+".txt");
+		return new WinSCPScript(scriptName + ".txt");
 	}
 
 	public WinSCPScript build() {
-		notEmpty(scriptName, ftpUrl, copyDestination, copyTarget, ftpDir,
-				ftpUrl, scriptName);
+		notEmpty(scriptName, ftpUrl, copyDestination, copyTarget, ftpDir, ftpUrl, scriptName);
 		return this;
 	}
 
 	private void notEmpty(String... fields) {
 		for (String s : fields) {
 			String field = Strings.emptyToNull(s);
-			Objects.requireNonNull(field,
-					"WinSCPScript cannot handle null values." + toString());
+			Objects.requireNonNull(field, "WinSCPScript cannot handle null values." + toString());
 		}
 	}
 
@@ -68,12 +72,12 @@ public class WinSCPScript {
 		this.ftpUrl = url;
 		return this;
 	}
-	
+
 	public WinSCPScript get() {
 		templateKey = GET_TEMPLATE;
 		return this;
 	}
-	
+
 	public WinSCPScript put() {
 		templateKey = PUT_TEMPLATE;
 		return this;
@@ -108,7 +112,7 @@ public class WinSCPScript {
 	public String getScriptName() {
 		return scriptName;
 	}
-	
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
@@ -117,6 +121,5 @@ public class WinSCPScript {
 	public String getTemplateKey() {
 		return templateKey;
 	}
-
 
 }

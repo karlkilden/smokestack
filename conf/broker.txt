@@ -1,0 +1,9 @@
+option batch abort
+option confirm off
+open ftp://rdkund:raindance@ftp1.wm.net/
+cd Karlk/meta/Kalle/
+option transfer binary
+put %1%
+# Disconnect
+close
+exit

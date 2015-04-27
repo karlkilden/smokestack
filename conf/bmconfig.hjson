@@ -1,0 +1,44 @@
+{
+
+  /** ****** ftp settings ******** */
+ 
+  // Config url for ftp
+  ftpURL: ftp://rdkund:raindance@ftp1.wm.net/
+  // Closest parent to birdman folder
+  ftpDir: Karlk
+  // Birdman folder
+  ftpBmDir: meta
+  
+  /** ****** tomcat settings ****** */
+
+  warfileName: test
+  tomcatService: TomEE
+  // For example localhost
+  tomcatHost: localhost
+  tomcatPort: 8080
+  tomcatShutdownPort: 8005
+  tomcatHome: C:\\tomcat\\apache-tomcat-7.0.34\\
+  // Time it takes for tomcat to shutdown
+  tomcatShutdownSleep: 2000
+  localTempDir: C:\\projects\\WinSCP\\
+  winscpDir: C:\\projects\\WinSCP\\
+  users:
+  [
+    Kalle
+	kildenka
+  ]
+  shutdownWhenNewWar: true
+  
+  /** ****** client settings ****** */
+
+  client: true
+  systems:
+  {
+    trunk: C:\\tomcat\\apache-tomcat-7.0.34\\logs
+    released: c:\\test\\test
+    verification: c:\\test\\test
+    production: c:\\test\\test
+  }
+  brokerDir: \\164.9.165.138\e$\RPSenasteWAR\bmdrop
+  
+}

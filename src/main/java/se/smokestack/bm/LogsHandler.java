@@ -1,9 +1,6 @@
 package se.smokestack.bm;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-
 import java.io.IOException;
-import java.nio.file.Files;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -12,42 +9,41 @@ import org.apache.deltaspike.core.util.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import se.smokestack.boot.Dirs;
+
 @ApplicationScoped
-public class WarFileHandler extends BMCommandHandler {
+public class LogsHandler extends BMCommandHandler {
 	private static final Logger LOG = LogManager.getLogger();
 
 	@Inject
 	private IOHelper ioHelper;
 	
 	@Inject
-	private BMConfig bmConfig;
-	
+	BMConfig bmConfig;
+
 	@Override
 	public Command command() {
-		return Command.RESTART;
+		return Command.LOGS;
 	}
 
 	@Override
 	public void handle(BMCommand data) {
-				
-		if (bmConfig.isShutdownWhenNewWar()) {
-			ioHelper.stopTomcat();			
-		}
-	    replaceWar();
-	    
-	    ioHelper.startTomcat();
-	    
+		copyLogs();
+	}
+	
+	private void copyLogs() {
+		copyFilesToTempDir();
+		WinSCPScript script = WinSCPScript.getWriteInstance(BMCommand.PUT_LOGS_FILE_NAME, bmConfig).put().target(bmConfig.fullLogsTargetPath().toString());
+		
+		ioHelper.winscp(script);
+		
 	}
 
-	private void replaceWar() {
+	private void copyFilesToTempDir() {
 		try {
-			Files.copy(bmConfig.fullWarFilePath(), bmConfig.fullWarFileTargetPath(), REPLACE_EXISTING);
-			
+			Dirs.copy(bmConfig.fullLogsPath(), bmConfig.fullLogsTargetPath());
 		} catch (IOException e) {
 			ExceptionUtils.throwAsRuntimeException(e);
-		}
+		}		
 	}
-
-
-
 }
