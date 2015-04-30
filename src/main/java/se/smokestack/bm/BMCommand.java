@@ -12,6 +12,8 @@ public class BMCommand implements Serializable {
 	public static final String PUT_FILE_NAME = "command.put";
 	public static final String PUT_LOGS_FILE_NAME = "logs.put";
 	public static final String CLIENT_FILE_NAME = "client.put";
+	public static final String RESPONSE_GET = "response.get";
+	public static final String FTP_PUT = "ftp.put";
 
 	private String user;
 	private Command command;
@@ -76,6 +78,10 @@ public class BMCommand implements Serializable {
 
 	public void setSystem(String system) {
 		this.system = system;
+	}
+
+	public void setCommand(Command newCommand) {
+		this.command = newCommand;
 	}
 
 }

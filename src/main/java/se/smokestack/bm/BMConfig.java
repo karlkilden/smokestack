@@ -18,7 +18,7 @@ import org.apache.deltaspike.core.util.ExceptionUtils;
 @Alternative
 public class BMConfig implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private String warfileName;
 	private String ftpURL;
 	private String ftpDir;
@@ -35,17 +35,33 @@ public class BMConfig implements Serializable {
 	private Set<String> users;
 	private String system;
 	private boolean client;
+	private boolean broker;
+	private String warfilesLocation;
+	private long loopInterval;
+	private String brokerFolder;
+
 	private Map<String, String> systems = new HashMap<>();
-	private String brokerDir;
+
+	private String jenkinsURL;
+	private Map<String, String> jobNames = new HashMap<>();
+	private Map<String, String> warNames = new HashMap<>();
+	private String brokerParentDir; // For clients
+
+	private String brokerResponseDir;
 
 	private transient BMCommand bmCommand;
 	private transient Set<String> userDirs = new HashSet<>();
 	private transient String userCommandPath;
 	private transient String userDir;
+	private transient String userDirTemplate;
+
+	private String serverTempDir;
 
 	public void postConstruct() {
+		userDirTemplate = serverTempDir + "\\" + system + "\\";
+		
 		for (String user : users) {
-			String userDir = localTempDir + ftpBmDir + "\\" + user + "\\";
+			String userDir = userDirTemplate + user + "\\";
 			userDirs.add(userDir);
 		}
 
@@ -54,7 +70,8 @@ public class BMConfig implements Serializable {
 	public void addMetadata(BMCommand bmCommand) {
 		requireNonNull(bmCommand, "this operation requires bmCommand");
 		this.bmCommand = bmCommand;
-		userDir = localTempDir + ftpBmDir + "\\" + bmCommand.getUser() + "\\";
+		userDir = userDirTemplate + bmCommand.getUser() + "\\";
+
 		this.userCommandPath = userDir + BMCommand.BM_COMMAND;
 
 		authenticate();
@@ -232,12 +249,84 @@ public class BMConfig implements Serializable {
 		this.systems = systems;
 	}
 
-	public String getBrokerDir() {
-		return brokerDir;
+	public String brokerDir() {
+		return brokerParentDir + brokerFolder;
 	}
 
-	public void setBrokerDir(String brokerDir) {
-		this.brokerDir = brokerDir;
+	public Map<String, String> getJobNames() {
+		return jobNames;
+	}
+
+	public void setJobNames(Map<String, String> jobNames) {
+		this.jobNames = jobNames;
+	}
+
+	public Map<String, String> getWarNames() {
+		return warNames;
+	}
+
+	public void setWarNames(Map<String, String> warNames) {
+		this.warNames = warNames;
+	}
+
+	public String getJenkinsURL() {
+		return jenkinsURL;
+	}
+
+	public void setJenkinsURL(String jenkinsURL) {
+		this.jenkinsURL = jenkinsURL;
+	}
+
+	public String getWarfilesLocation() {
+		return warfilesLocation;
+	}
+
+	public void setWarfilesLocation(String warfilesLocation) {
+		this.warfilesLocation = warfilesLocation;
+	}
+
+	public long getLoopInterval() {
+		return loopInterval;
+	}
+
+	public void setLoopInterval(long loopInterval) {
+		this.loopInterval = loopInterval;
+	}
+
+	public String getBrokerResponseDir() {
+		return brokerResponseDir;
+	}
+
+	public void setBrokerResponseDir(String brokerResponseDir) {
+		this.brokerResponseDir = brokerResponseDir;
+	}
+
+	public boolean isBroker() {
+		return broker;
+	}
+
+	public void setBroker(boolean broker) {
+		this.broker = broker;
+	}
+
+	public String getBrokerFolder() {
+		return brokerFolder;
+	}
+
+	public void setBrokerFolder(String brokerFolder) {
+		this.brokerFolder = brokerFolder;
+	}
+
+	public String getBrokerParentDir() {
+		return brokerParentDir;
+	}
+
+	public void setBrokerParentDir(String brokerParentDir) {
+		this.brokerParentDir = brokerParentDir;
+	}
+
+	public String getServerTempDir() {
+		return serverTempDir;
 	}
 
 }

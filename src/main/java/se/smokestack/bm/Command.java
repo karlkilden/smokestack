@@ -2,5 +2,5 @@ package se.smokestack.bm;
 
 public enum Command {
 
-	WAR, RESTART, LOGS
+	WAR, RESTART, LOGS, UPGRADE, RESPONSE
 }

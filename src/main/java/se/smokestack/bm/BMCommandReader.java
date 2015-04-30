@@ -20,16 +20,13 @@ public class BMCommandReader {
 
 	@Inject
 	private BMConfig bmConfig;
+	
 
-	@Inject
-	private IOHelper ioHelper;
 
 	ObjectMapper mapper = new ObjectMapper();
 
-	public Optional<BMCommand> getNextMeta() {
+	public Optional<BMCommand> getNextCommand() {
 
-		WinSCPScript script = createScript();
-		runScript(script);
 		BMCommand bmCommand = findNewMetadata();
 		return Optional.ofNullable(bmCommand);
 	}
@@ -37,6 +34,8 @@ public class BMCommandReader {
 	private BMCommand findNewMetadata() {
 		try {
 			for (String userDir : bmConfig.getUserDirs()) {
+				LOG.debug("trying to read command at path {}", userDir);
+
 				File bmCommandFile = new File(userDir + BMCommand.BM_COMMAND);
 				BMCommand currentMeta = null;
 				if (bmCommandFile.exists()) {
@@ -46,10 +45,11 @@ public class BMCommandReader {
 					} else if (currentMeta.isInError()) {
 						LOG.info("this bmCommand is in error");
 					} else {
-						if (!userDir.contains(currentMeta.getUser()))  {
+						if (!userDir.contains(currentMeta.getUser())) {
 							throw new IllegalArgumentException("directory and bmcommand user is not matching");
 						}
 						LOG.info("bmCommand details: {}", currentMeta.toString());
+						bmCommandFile.delete();
 						return currentMeta;
 					}
 				}
@@ -59,15 +59,8 @@ public class BMCommandReader {
 		}
 		return null;
 	}
-
-	private void runScript(WinSCPScript script) {
-		ioHelper.winscp(script);
-	}
-
-	private WinSCPScript createScript() {
-		WinSCPScript script = WinSCPScript.getInstance(BMCommand.GET_FILE_NAME).get().destination(bmConfig.getLocalTempDir())
-				.target(bmConfig.getFtpBmDir()).ftpDir(bmConfig.getFtpDir()).ftpUrl(bmConfig.getFtpURL());
-		return script;
-	}
+		
+		
+	
 
 }

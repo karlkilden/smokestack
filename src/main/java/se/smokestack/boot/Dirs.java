@@ -12,6 +12,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.EnumSet;
 import java.util.Objects;
 
+import org.apache.deltaspike.core.util.ExceptionUtils;
+
 public class Dirs {
 
 	public static void copy(Path from, Path to) throws IOException {
@@ -26,6 +28,17 @@ public class Dirs {
 			if (!Files.isDirectory(path)) {
 				throw new IllegalArgumentException(String.format("%s is not a directory", path.toString()));
 			}
+		}
+	}
+
+	public static void cleanIfExists(Path path) {
+		try {
+			if (Files.exists(path)) {
+				validate(path);
+				Files.walkFileTree(path, new CleanDirVisitor());
+			}
+		} catch (Exception e) {
+			ExceptionUtils.throwAsRuntimeException(e);
 		}
 	}
 
@@ -54,5 +67,10 @@ public class Dirs {
 			Files.copy(file, toPath.resolve(fromPath.relativize(file)), copyOption);
 			return FileVisitResult.CONTINUE;
 		}
+	}
+
+	public static void delete(Path path) throws IOException {
+		validate(path);
+		Files.walkFileTree(path, new DeleteDirVisitor());
 	}
 }

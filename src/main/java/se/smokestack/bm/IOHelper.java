@@ -46,12 +46,16 @@ public class IOHelper {
 		return null;
 	}
 
-	public void winscp(WinSCPScript script) {
+	public void winscp(WinSCPScript script, boolean cache) {
 		script.build();
-		winSCPHandler.writeScriptToDisk(script);
+		winSCPHandler.writeScriptToDisk(script, cache);
 		String cmd = WINSCP_SCRIPT_TEMPLATE.replace(WINSPC_DIR, bmConfig.getWinscpDir());
 		cmd = cmd.replace(SCRIPT_NAME, script.getScriptName());
 		processRunner.runProcess(cmd);
+	}
+	
+	public void winscp(WinSCPScript script) {
+		winscp(script, true);
 	}
 
 	public void startService() {
@@ -59,8 +63,8 @@ public class IOHelper {
 	}
 	
 	public void serviceCmd(String action) {
-		String cmd = "cmd /c start mpservice.bat " + action +" " + bmConfig.getTomcatService();
-		processRunner.runProcess(cmd);
+		String cmd = "mpservice.bat " + action +" " + bmConfig.getTomcatService();
+		processRunner.runBat(cmd);
 	}
 
 	public void stopTomcat() {

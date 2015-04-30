@@ -9,13 +9,17 @@ public class ProcessRunner {
 
 	public void runProcess(String command) {
 
-		log.info("running cmd: {}", command);
+		log.debug("running cmd: {}", command);
 		try {
 			Process process = Runtime.getRuntime().exec(command);
 			process.waitFor();
 		} catch (Exception e) {
 			ExceptionUtils.throwAsRuntimeException(e);
 		}
+	}
+
+	public void runBat(String brokerbatPath) {
+		runProcess("cmd /c start " + brokerbatPath);
 	}
 
 }

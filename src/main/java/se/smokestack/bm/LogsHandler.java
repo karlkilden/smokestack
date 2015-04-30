@@ -33,7 +33,7 @@ public class LogsHandler extends BMCommandHandler {
 	
 	private void copyLogs() {
 		copyFilesToTempDir();
-		WinSCPScript script = WinSCPScript.getWriteInstance(BMCommand.PUT_LOGS_FILE_NAME, bmConfig).put().target(bmConfig.fullLogsTargetPath().toString());
+		WinSCPScript script = WinSCPScript.getWriteToBrokerInstance(BMCommand.PUT_LOGS_FILE_NAME, bmConfig).put().target(bmConfig.fullLogsTargetPath().toString());
 		
 		ioHelper.winscp(script);
 		

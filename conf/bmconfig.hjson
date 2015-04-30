@@ -2,17 +2,12 @@
 
   /** ****** ftp settings ******** */
  
-  // Config url for ftp
-  ftpURL: ftp://rdkund:raindance@ftp1.wm.net/
-  // Closest parent to birdman folder
-  ftpDir: Karlk
-  // Birdman folder
-  ftpBmDir: meta
-  
+
   /** ****** tomcat settings ****** */
 
+  system: trunk
   warfileName: test
-  tomcatService: TomEE
+  tomcatService: TomEEE:\Marknadsplatsen\birdman\temp
   // For example localhost
   tomcatHost: localhost
   tomcatPort: 8080
@@ -20,25 +15,52 @@
   tomcatHome: C:\\tomcat\\apache-tomcat-7.0.34\\
   // Time it takes for tomcat to shutdown
   tomcatShutdownSleep: 2000
-  localTempDir: C:\\projects\\WinSCP\\
-  winscpDir: C:\\projects\\WinSCP\\
+  localTempDir: C:\\birdman\\tmp\\
+  serverTempDir: C:\\birdman\\server\\temp\\
+  winscpDir: C:\\birdman\\winscp\\
+  brokerParentDir: \\164.9.166.174\e$\winscp\
+  brokerFolder: serverget
+
   users:
   [
     Kalle
 	kildenka
   ]
   shutdownWhenNewWar: true
+  //minutes if 0 it will not loop
+  loopInterval: 2
   
   /** ****** client settings ****** */
 
   client: true
   systems:
   {
-    trunk: C:\\tomcat\\apache-tomcat-7.0.34\\logs
+    trunk: C:\\birdman\\io\\
     released: c:\\test\\test
     verification: c:\\test\\test
     production: c:\\test\\test
   }
-  brokerDir: C:\\kalle\\smokestack\\target\\
-  
+ 
+  /** ****** client upgrade settings ****** */ 
+ warfilesLocation: \\164.9.165.138\e$\RPSenasteWAR\
+ jenkinsURL: http://hudson2.got.wmdata.se:8080/jenkins/
+ warNames:
+ {
+   trunk: mp.war
+   released: c:\\test\\test
+   verification: c:\\test\\test
+   production: c:\\test\\test
+ }
+ jobNames:
+ {
+   trunk: MP%20-%20Nightly/
+   released: c:\\test\\test
+   verification: c:\\test\\test
+   production: c:\\test\\test
+ }    
+    
+
+/** ****** broker server settings ****** */ 
+  brokerResponseDir: C:\\birdman\\broker\\responses\\
+  broker: true
 }

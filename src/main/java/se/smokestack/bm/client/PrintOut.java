@@ -27,7 +27,7 @@ public class PrintOut {
 	
 	
 	public static void prompt() {
-		System.out.println("bm: ");
+		System.out.print("bm: ");
 	}
 
 	public static void spaced(String string) {

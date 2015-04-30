@@ -10,6 +10,10 @@
 		<File name="cmdlog" fileName="cmdlog.log" bufferedIO="false">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</File>
+		
+		<File name="bmdebug" fileName="bmdebug.log" bufferedIO="true">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</File>
 	</Appenders>
 
 	<Loggers>
@@ -19,6 +23,10 @@
 		</Root>
 		<Logger name="se.smokestack.bm.log" additivity="TRUE" level="ALL">
 			<AppenderRef ref="cmdlog" level="ALL" />
+		</Logger>
+
+		<Logger name="se.smokestack.bm.debug" additivity="TRUE" level="ALL" >
+			<AppenderRef ref="bmdebug" level="ALL" />
 		</Logger>
 	</Loggers>
 </Configuration>
