@@ -12,8 +12,10 @@ import org.apache.deltaspike.core.util.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import se.bm.server.CommandWrapper;
+
 @ApplicationScoped
-public class WarFileHandler extends BMCommandHandler {
+public class WarFileHandler implements BMCommandHandler {
 	private static final Logger LOG = LogManager.getLogger();
 
 	@Inject
@@ -27,7 +29,6 @@ public class WarFileHandler extends BMCommandHandler {
 		return Command.RESTART;
 	}
 
-	@Override
 	public void handle(BMCommand data) {
 				
 		if (bmConfig.isShutdownWhenNewWar()) {
@@ -46,6 +47,12 @@ public class WarFileHandler extends BMCommandHandler {
 		} catch (IOException e) {
 			ExceptionUtils.throwAsRuntimeException(e);
 		}
+	}
+
+	@Override
+	public void handle(CommandWrapper commandWrapper) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

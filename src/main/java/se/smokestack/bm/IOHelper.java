@@ -8,7 +8,12 @@ import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -18,8 +23,16 @@ import org.apache.deltaspike.core.util.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.common.base.Strings;
+
+import se.bm.server.ServerConfig;
+import se.bm.server.ftp.Script;
+import se.bm.server.ftp.ScriptKey;
+
 @ApplicationScoped
 public class IOHelper {
+	public static final String SLASH = "\\";
+
 	private static final Logger LOG = LogManager.getLogger();
 
 	private static final String CMD_C = "cmd /c ";
@@ -32,7 +45,10 @@ public class IOHelper {
 
 	@Inject
 	private BMConfig bmConfig;
-	
+
+	@Inject
+	ServerConfig serverConfig;
+
 	@Inject
 	WinSCPHandler winSCPHandler;
 
@@ -53,7 +69,7 @@ public class IOHelper {
 		cmd = cmd.replace(SCRIPT_NAME, script.getScriptName());
 		processRunner.runProcess(cmd);
 	}
-	
+
 	public void winscp(WinSCPScript script) {
 		winscp(script, true);
 	}
@@ -61,9 +77,9 @@ public class IOHelper {
 	public void startService() {
 		serviceCmd("start");
 	}
-	
+
 	public void serviceCmd(String action) {
-		String cmd = "mpservice.bat " + action +" " + bmConfig.getTomcatService();
+		String cmd = "mpservice.bat " + action + " " + bmConfig.getTomcatService();
 		processRunner.runBat(cmd);
 	}
 
@@ -96,6 +112,39 @@ public class IOHelper {
 			Thread.sleep(time);
 		} catch (InterruptedException e) {
 			ExceptionUtils.throwAsRuntimeException(e);
+		}
+	}
+
+	public void winscp(Script script) {
+		writeScriptToDisk(script);
+		String cmd = WINSCP_SCRIPT_TEMPLATE.replace(WINSPC_DIR, serverConfig.getWinscpDir());
+		cmd = cmd.replace(SCRIPT_NAME, script.getName());
+		processRunner.runProcess(cmd);
+	}
+
+	private Set<ScriptKey> savedScripts = new HashSet<>();
+
+	public void writeScriptToDisk(Script script) {
+
+		if (!savedScripts.contains(script.getKey())) {
+			String file = script.get();
+			try {
+				Files.write(Paths.get(serverConfig.getWinscpDir() +SLASH +script.getName()), file.getBytes());
+			} catch (IOException e) {
+				ExceptionUtils.throwAsRuntimeException(e);
+			}
+			if (!script.getKey().isDynamic()) {
+				savedScripts.add(script.getKey());
+			}
+		}
+	}
+	
+	public void validatePath(String dir, String msg) {
+		String d = Strings.emptyToNull(dir);
+		Objects.requireNonNull(d, "required configuration missing: " + msg);
+		File test = new File(d);
+		if(!test.exists()) {
+			throw new IllegalStateException("required path missing: "+ msg);
 		}
 	}
 

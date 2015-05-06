@@ -251,7 +251,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>se.smokestack.boot.Smokestack</mainClass>
+							<mainClass>se.smokestack.boot.BirdmanStartup</mainClass>
 							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>
 					</archive>

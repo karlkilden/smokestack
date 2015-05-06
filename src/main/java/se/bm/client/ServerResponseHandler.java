@@ -1,4 +1,4 @@
-package se.smokestack.bm.client;
+package se.bm.client;
 
 import javax.inject.Inject;
 

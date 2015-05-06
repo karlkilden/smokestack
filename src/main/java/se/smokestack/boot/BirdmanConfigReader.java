@@ -2,6 +2,7 @@ package se.smokestack.boot;
 
 import static se.smokestack.boot.Conf.split;
 
+
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -34,9 +35,6 @@ public class BirdmanConfigReader {
 			}
 		}
 	}
-	
-
-
 
 	public ConfHolder getConfHolder(String[] params) {
 		return  holder.build(split(params[0]), params);

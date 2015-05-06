@@ -1,11 +1,13 @@
 package se.smokestack.bm;
 
-public abstract class BMCommandHandler {
+import se.bm.server.CommandWrapper;
+
+public interface BMCommandHandler {
 
 
-	abstract Command command();
+	public  Command command();
 
-	abstract void handle(BMCommand data);
+	public  void handle(CommandWrapper commandWrapper);
 	
 
 

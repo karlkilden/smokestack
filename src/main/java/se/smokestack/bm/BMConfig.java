@@ -15,7 +15,7 @@ import javax.security.auth.login.FailedLoginException;
 
 import org.apache.deltaspike.core.util.ExceptionUtils;
 
-@Alternative
+
 public class BMConfig implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -171,7 +171,7 @@ public class BMConfig implements Serializable {
 		this.localTempDir = localTempDir;
 	}
 
-	public String getWinscpDir() {
+	public String script() {
 		return winscpDir;
 	}
 
@@ -327,6 +327,11 @@ public class BMConfig implements Serializable {
 
 	public String getServerTempDir() {
 		return serverTempDir;
+	}
+
+	public CharSequence getWinscpDir() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

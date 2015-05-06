@@ -1,0 +1,11 @@
+{
+  brokerDir: brokerdir
+  jenkinsURL: jenkins
+  warInfos:
+  [
+    {
+      warName: null
+      jobName: null
+    }
+  ]
+}

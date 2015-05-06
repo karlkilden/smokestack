@@ -1,0 +1,7 @@
+option batch abort
+option confirm off
+open ftpurltest
+cd mpsys/birdman//input
+option transfer binary
+get null null
+close

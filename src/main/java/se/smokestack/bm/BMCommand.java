@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import se.bm.core.UserOptions;
+
 public class BMCommand implements Serializable {
 	private static final long serialVersionUID = -4519914870328386451L;
 	public static final String BM_COMMAND = "bmCommand.json";
@@ -21,7 +23,7 @@ public class BMCommand implements Serializable {
 	private boolean inError;
 	private String system;
 	
-	private Options options;
+	private UserOptions options;
 	
 	public String getUser() {
 		return user;
@@ -64,11 +66,11 @@ public class BMCommand implements Serializable {
 		this.inError = inError;
 	}
 
-	public Options getOptions() {
+	public UserOptions getOptions() {
 		return options;
 	}
 
-	public void setOptions(Options options) {
+	public void setOptions(UserOptions options) {
 		this.options = options;
 	}
 

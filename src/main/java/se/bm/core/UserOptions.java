@@ -1,4 +1,4 @@
-package se.smokestack.bm;
+package se.bm.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,32 +11,35 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.beust.jcommander.Parameter;
 
 @Alternative
-public class Options {
+public class UserOptions extends OptionsBase {
+	private static UserOptions instance;
 
 	@Parameter(description = "Commands")
 	private List<String> commands = new ArrayList<>();
 
 	@Parameter(names = "-force", description = "force tomcat service to stop")
 	private boolean forceShutdown;
-	
+
 	@Parameter(names = "-resume", description = "Skip ftp calls and resume as if all files needed are downloaded")
 	private boolean resume;
-	
+
 	@Parameter(names = "-nobuild", description = "skip call to jenkins")
 	private boolean noBuild;
-	
+
 	@Parameter(names = "-noclean", description = "Skip removing files for debug purposes")
 	private boolean noClean;
-	
+
 	@Parameter(names = "-cmd", description = "Command of interest")
 	private String command;
-	
+
 	@Parameter(names = "-nowait", description = "Skip waiting for response")
 	private boolean skipWait;
 
 	@Parameter(names = "-keepData", description = "Keeps the data previously fetched. This may give false positives on reciving data")
 	private boolean keepData;
-	
+
+	@Parameter(names = "-broker", description = "if true the server will run as a broker")
+	private boolean broker;
 
 	public boolean isForceShutdown() {
 		return forceShutdown;
@@ -45,8 +48,6 @@ public class Options {
 	public void setForceShutdown(boolean forceShutdown) {
 		this.forceShutdown = forceShutdown;
 	}
-
-
 
 	@Override
 	public String toString() {
@@ -93,7 +94,25 @@ public class Options {
 		return skipWait;
 	}
 
-	public boolean isKeepData() {		
+	public boolean isKeepData() {
 		return keepData;
 	}
+
+	public boolean isBroker() {
+		return broker;
+	}
+
+	public void setBroker(boolean broker) {
+		this.broker = broker;
+	}
+
+	public static UserOptions getInstance() {
+		return instance;
+	}
+
+	public static void setInstance(UserOptions instance) {
+		UserOptions.instance = instance;
+	}
+
+
 }

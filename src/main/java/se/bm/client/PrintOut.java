@@ -1,4 +1,4 @@
-package se.smokestack.bm.client;
+package se.bm.client;
 
 public class PrintOut {
 	public static final String BIRDMAN = 

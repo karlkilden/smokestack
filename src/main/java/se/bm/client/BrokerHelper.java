@@ -1,4 +1,4 @@
-package se.smokestack.bm.client;
+package se.bm.client;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,19 +20,11 @@ import se.smokestack.boot.Dirs;
 public class BrokerHelper {
 	private static final Logger LOG = LogManager.getLogger();
 
-	@Inject
-	private BMConfig bmConfig;
 
 	@Inject
 	private BMCommandWriter bmCommandWriter;
 
-	public void copyTo(BMCommand cmd) {
-		String dropPath = bmConfig.getSystems().get(cmd.getSystem()) + "\\" + "put" + "\\" + cmd.getSystem();
-		LOG.info("dropPath:{}", dropPath);
-		requireDir(dropPath, "Drop dir configured for" + cmd.getSystem());
-		requireDir(bmConfig.getLocalTempDir(), "local temp dir must be configured");
-		requireDir(bmConfig.brokerDir(), "broker dir must be configured");
-
+	public void copyTo(ClientCommand command) {
 		String systemUserBrokerDir = bmConfig.brokerDir() + "\\" + cmd.getSystem() + "\\" + cmd.getUser();
 		requireDir(systemUserBrokerDir, "broker dir must be configured and a subfolder for each user (another subfolder for each system)");
 

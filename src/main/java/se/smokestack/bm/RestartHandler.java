@@ -6,8 +6,10 @@ import javax.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import se.bm.server.CommandWrapper;
+
 @ApplicationScoped
-public class RestartHandler extends BMCommandHandler {
+public class RestartHandler implements BMCommandHandler {
 	private static final Logger LOG = LogManager.getLogger();
 
 	@Inject
@@ -19,13 +21,18 @@ public class RestartHandler extends BMCommandHandler {
 		return Command.WAR;
 	}
 
-	@Override
 	public void handle(BMCommand data) {
 
 		ioHelper.stopTomcat();
 
 		ioHelper.startTomcat();
 
+	}
+
+	@Override
+	public void handle(CommandWrapper commandWrapper) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

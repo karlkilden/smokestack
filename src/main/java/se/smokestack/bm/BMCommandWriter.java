@@ -3,11 +3,11 @@ package se.smokestack.bm;
 import static org.apache.deltaspike.core.util.ExceptionUtils.throwAsRuntimeException;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
 
 import javax.inject.Inject;
 
+import se.bm.core.UserOptions;
 import se.smokestack.boot.Dirs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,15 +20,14 @@ public class BMCommandWriter {
 	@Inject
 	private IOHelper ioHelper;
 
-	@Inject
-	private Options options;
+	private UserOptions options;
 
-	void markHandled(BMCommand data) {
+	public void markHandled(BMCommand data) {
 		data.setHandled(true);
 		writeMetaData(data);
 	}
 
-	void markInError(BMCommand data) {
+	public void markInError(BMCommand data) {
 		data.setInError(true);
 		writeMetaData(data);
 	}

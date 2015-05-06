@@ -9,16 +9,16 @@ import org.apache.deltaspike.core.util.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import se.bm.server.CommandWrapper;
 import se.smokestack.boot.Dirs;
 
 @ApplicationScoped
-public class LogsHandler extends BMCommandHandler {
+public class LogsHandler implements BMCommandHandler {
 	private static final Logger LOG = LogManager.getLogger();
 
 	@Inject
 	private IOHelper ioHelper;
 	
-	@Inject
 	BMConfig bmConfig;
 
 	@Override
@@ -26,7 +26,6 @@ public class LogsHandler extends BMCommandHandler {
 		return Command.LOGS;
 	}
 
-	@Override
 	public void handle(BMCommand data) {
 		copyLogs();
 	}
@@ -45,5 +44,11 @@ public class LogsHandler extends BMCommandHandler {
 		} catch (IOException e) {
 			ExceptionUtils.throwAsRuntimeException(e);
 		}		
+	}
+
+	@Override
+	public void handle(CommandWrapper commandWrapper) {
+		// TODO Auto-generated method stub
+		
 	}
 }

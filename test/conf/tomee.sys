@@ -1,0 +1,19 @@
+{
+  service: null
+  shutdowmPort: 0
+  hostPort: null
+  host: host
+  wars:
+  [
+    war
+    war2
+  ]
+  tomcatHome: null
+  shutdownWait: 0
+  hotdeploy: false
+  users:
+  [
+    user
+    user2
+  ]
+}

@@ -5,6 +5,8 @@ import javax.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import se.bm.core.UserOptions;
+
 public class BMBroker {
 	private static final Logger LOG = LogManager.getLogger();
 
@@ -14,8 +16,7 @@ public class BMBroker {
 	@Inject
 	private BMConfig bmConfig;
 
-	@Inject
-	private Options options;
+	private UserOptions options;
 
 	@Inject
 	private IOHelper ioHelper;

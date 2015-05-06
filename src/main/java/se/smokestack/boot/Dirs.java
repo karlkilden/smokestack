@@ -6,12 +6,14 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Objects;
-
 import org.apache.deltaspike.core.util.ExceptionUtils;
 
 public class Dirs {
@@ -40,6 +42,27 @@ public class Dirs {
 		} catch (Exception e) {
 			ExceptionUtils.throwAsRuntimeException(e);
 		}
+	}
+
+	public static List<Path> getAllFiles(String directory, String extension) {
+
+		List<Path> files = new ArrayList<>();
+		try {
+			Path path = Paths.get(directory);
+			validate(path);
+			Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					if (!attrs.isDirectory() && file.toString().endsWith(extension)) {
+						files.add(file);
+					}
+					return FileVisitResult.CONTINUE;
+				}
+			});
+		} catch (IOException e) {
+			ExceptionUtils.throwAsRuntimeException(e);
+		}
+		return files;
 	}
 
 	public static class CopyDirVisitor extends SimpleFileVisitor<Path> {
